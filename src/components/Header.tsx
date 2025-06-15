@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
 import * as todoService from '../api/todos';
+import { TodoErrors } from '../types/TodoErrors';
 
 interface Props {
   isInputDisabled: boolean;
@@ -26,7 +27,7 @@ export const Header: React.FC<Props> = ({
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
-      setErrorMessage('Title should not be empty');
+      setErrorMessage(TodoErrors.TitleEmpty);
 
       return;
     }
@@ -40,7 +41,7 @@ export const Header: React.FC<Props> = ({
         setTitle('');
       })
       .catch(() => {
-        setErrorMessage('Unable to add a todo');
+        setErrorMessage(TodoErrors.UnableToAddTodo);
       });
   };
 

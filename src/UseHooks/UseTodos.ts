@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as todoService from '../api/todos';
 import { Todo } from '../types/Todo';
+import { TodoErrors } from '../types/TodoErrors';
 
 export function useTodo() {
   const [data, setData] = useState<Todo[]>([]);
@@ -26,7 +27,7 @@ export function useTodo() {
     todoService
       .getTodos()
       .then(setData)
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => setErrorMessage(TodoErrors.UnableToLoad));
   }, []);
 
   const deleteTodo = (todoId: number) => {
@@ -34,7 +35,7 @@ export function useTodo() {
     todoService
       .deleteTodos(todoId)
       .then(() => setData(prev => prev.filter(todo => todo.id !== todoId)))
-      .catch(() => setErrorMessage('Unable to delete a todo'))
+      .catch(() => setErrorMessage(TodoErrors.UnableToDeleteTodo))
       .finally(() => setIsTodoDeleted(null));
   };
 
@@ -65,7 +66,7 @@ export function useTodo() {
         const isSomeFailed = results.some(r => r.status === 'rejected');
 
         if (isSomeFailed) {
-          setErrorMessage('Unable to delete a todo');
+          setErrorMessage(TodoErrors.UnableToDeleteTodo);
         }
 
         setData(prev => prev.filter(todo => !successIds.includes(todo.id)));
